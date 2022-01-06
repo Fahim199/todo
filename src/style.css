@@ -5,7 +5,7 @@ body {
 .todo-list {
   background-color: white;
   margin: auto;
-  width: 50%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,15 +26,54 @@ body {
 
 .todo-item {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  padding: 30px 20px 0;
+  padding: 0.5rem;
   width: 70%;
   border-bottom: 1px solid #cecece;
   font-family: Roboto, sans-serif;
   font-weight: 100;
   font-size: 15px;
   color: #333333;
+}
+.todo-item_description{
+  display: flex;
+  flex-direction: column;
+  /* gap:1rem; */
+  align-items: flex-start;
+  flex-flow: column;
+  justify-content: flex-start;
+  flex: 1;
+}
+.todo-item h5 {
+  font-size: 0.8rem;
+  color: #34373d;
+}
+.todo-date{
+  display: flex;
+  flex-direction: column;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid #ececec;
+  background-color: #ada99e;
+  color: white;
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+.todo-date__month {
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.todo-date__year {
+  font-size: 0.75rem;
+}
+
+.todo-date__day {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 input[type=checkbox] {
@@ -47,4 +86,25 @@ input[type=checkbox]:focus {
 }
 .delete{
   margin-left: 10px;
+}
+
+input[type=text] {
+ 
+  width: 100%;
+  margin-right: 50px;
+}
+input[type=date]{
+  margin-bottom: 10px;
+  width: 64%;
+}
+.upperP{
+  margin-bottom: 50px;
+  display: flex;
+  
+  
+}
+.sortList{
+  margin-left: 65px;
+  margin-top: 100px;
+  
 }

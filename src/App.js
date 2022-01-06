@@ -8,10 +8,49 @@ class App extends React.Component {
     constructor() {
         super()
         this.state = {
-            todos: todosData
+            todos: todosData,
+            optionsState:''
         }
         this.handleChange = this.handleChange.bind(this)
+        this.handlePriority = this.handlePriority.bind(this)
     }
+    handleselect=(event)=>{
+        if (event.target.value === "date") {
+            this.setState(prevState => {
+                const updatedTodos = prevState.todos.sort(function(a, b) {
+                    var c = new Date(a.date);
+                    var d = new Date(b.date);
+                    return c-d;            
+                })
+                return {
+                    todos: updatedTodos,
+                    optionsState:event.target.value
+                }
+            
+            })
+        }else if(event.target.value === "priority"){
+            this.setState(prevState => {
+                const updatedTodos = prevState.todos.sort(function(a, b) {
+                    return b.priority-a.priority;            
+                })
+                return {
+                    todos: updatedTodos,
+                    optionsState:event.target.value
+                }
+            
+            })
+        }else{
+
+            this.setState(prevState=>{
+                return{
+                    todos:prevState.todos,
+                    optionsState:event.target.value
+                }
+                
+            })
+        }
+    }   
+    
     
     handleChange(id) {
         this.setState(prevState => {
@@ -22,7 +61,22 @@ class App extends React.Component {
                 return todo
             })
             return {
-                todos: updatedTodos
+                todos: updatedTodos,
+                optionsState: prevState.optionsState
+            }
+        })
+    }
+    handlePriority(id){
+        this.setState(prevState => {
+            const updatedTodos = prevState.todos.map(todo => {
+                if (todo.id === id) {
+                    todo.priority = !todo.priority
+                }
+                return todo
+            })
+            return {
+                todos: updatedTodos,
+                optionsState: prevState.optionsState
             }
         })
     }
@@ -30,7 +84,8 @@ class App extends React.Component {
         const newTodos={
             ...enteredTodo,
             id:Math.random().toString(),
-            completed:false
+            completed:false,
+            priority: false
         };
         
         this.setState(prevState => {
@@ -38,25 +93,44 @@ class App extends React.Component {
                 ...prevState.todos,
                 newTodos
             ]
-            return {
-                todos: updatedTodos
+            return{
+                todos: updatedTodos,
+                optionsState:''
             }
         })
     }
     handledel=(id)=>{
         const updatedTodos= this.state.todos.filter((todo)=>todo.id!==id);
-        this.setState({todos:updatedTodos})
+        this.setState(prevState => {
+            return{
+                todos:updatedTodos,
+                optionsState:prevState.optionsState
+            }
+        })
     }
-
+    
     render() {
         const todoItems = this.state.todos.map(item => <TodoItem key={item.id} item={item} handleChange={this.handleChange}
-        handledel={this.handledel}/>)
+        handledel={this.handledel} handlePriority={this.handlePriority}/>)
         
         return (
-            <div className="todo-list">
-                <Add onSaveTodo={this.saveNewTodo}/>
-                {todoItems}
+            <div>
+                
+                <div className="todo-list">
+                    <div className="upperP">
+                        <Add  onSaveTodo={this.saveNewTodo}/>
+                        
+                        <select className="sortList"value= {this.state.optionsState} onChange={this.handleselect}>
+                            <option value=''>Sort by</option>
+                            <option value='date'>By Date</option>
+                            <option value='priority'>By Priority</option>
+                        </select>
+                    </div>
+                    
+                    {todoItems}
+                </div>
             </div>
+            
         )    
     }
 }
