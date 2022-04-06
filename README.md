@@ -1,3 +1,3 @@
-#Todo app for University
+#Todo app
 
-This is a todo app created with react, and I wrote it after 10days into learning react
+This is a todo app that I created while learning react
