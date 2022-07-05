@@ -1,19 +1,24 @@
 import React from "react"
 import TodoItem from "./TodoItem"
-import todosData from "./todosData"
+// import todosData from "./todosData"
 import Add from "./add"
 import "./style.css"
+
 
 class App extends React.Component {
     constructor() {
         super()
         this.state = {
-            todos: todosData,
+            todos: [],
             optionsState:''
         }
         this.handleChange = this.handleChange.bind(this)
         this.handlePriority = this.handlePriority.bind(this)
+        this.loadTodos = this.loadTodos.bind(this)
+        this.loadTodos();
     }
+
+
     handleselect=(event)=>{
         if (event.target.value === "date") {
             this.setState(prevState => {
@@ -51,62 +56,78 @@ class App extends React.Component {
         }
     }   
     
+    loadTodos = () =>{
+        fetch('http://localhost:3000')
+        .then(response => response.json())
+        .then(todos =>
+            {this.setState({todos: todos})})
+        
+        
+    }
     
     handleChange(id) {
-        this.setState(prevState => {
-            const updatedTodos = prevState.todos.map(todo => {
-                if (todo.id === id) {
-                    todo.completed = !todo.completed
-                }
-                return todo
+        fetch('http://localhost:3000/complete',
+            {
+                method:'PUT',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    id: id  
+                })
             })
-            return {
-                todos: updatedTodos,
-                optionsState: prevState.optionsState
-            }
-        })
+            .then(response => response.json())
+            .then(todos =>
+                {this.setState({todos: todos})})
     }
+    
     handlePriority(id){
-        this.setState(prevState => {
-            const updatedTodos = prevState.todos.map(todo => {
-                if (todo.id === id) {
-                    todo.priority = !todo.priority
-                }
-                return todo
+        fetch('http://localhost:3000/priority',
+            {
+                method:'PUT',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    id: id  
+                })
             })
-            return {
-                todos: updatedTodos,
-                optionsState: prevState.optionsState
-            }
-        })
+            .then(response => response.json())
+            .then(todos =>
+                {this.setState({todos: todos})})
     }
+
+
     saveNewTodo=(enteredTodo)=>{
         const newTodos={
             ...enteredTodo,
-            id:Math.random().toString(),
             completed:false,
             priority: false
         };
+        fetch('http://localhost:3000/enter',
+            {
+                method:'POST',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    text: newTodos.text,
+                    date: newTodos.date,
+                    completed: newTodos.completed,
+                    priority: newTodos.priority
+                })
+            })
+            .then(response => response.json())
+            .then(todos =>
+                {this.setState({todos: todos})})
         
-        this.setState(prevState => {
-            const updatedTodos = [
-                ...prevState.todos,
-                newTodos
-            ]
-            return{
-                todos: updatedTodos,
-                optionsState:''
-            }
-        })
     }
     handledel=(id)=>{
-        const updatedTodos= this.state.todos.filter((todo)=>todo.id!==id);
-        this.setState(prevState => {
-            return{
-                todos:updatedTodos,
-                optionsState:prevState.optionsState
-            }
-        })
+        fetch('http://localhost:3000/delete',
+            {
+                method:'DELETE',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    id: id  
+                })
+            })
+            .then(response => response.json())
+            .then(todos =>
+                {this.setState({todos: todos})})
     }
     
     render() {

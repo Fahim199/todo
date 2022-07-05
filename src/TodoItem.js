@@ -20,9 +20,10 @@ function TodoItem(props) {
         color: "#ccc",
         cursor: "pointer"
       }
-    const month = props.item.date.toLocaleString('en-US', { month: 'short' });
-    const day = props.item.date.toLocaleString('en-US', { day: '2-digit' });
-    const year = props.item.date.getFullYear();
+    const date= new Date(props.item.date);
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const day = date.toLocaleString('en-US', { day: '2-digit' });
+    const year = date.getFullYear();
     
     return (
         

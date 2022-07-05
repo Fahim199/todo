@@ -1,7 +1,8 @@
 import React,{useState} from "react"
 const Add =(props)=>{
     const d= new Date();
-    const m= d.getMonth()+1;
+    let m= d.getMonth();
+    if(m< 10) {m="0"+m;}
     const a= d.getFullYear()+'-'+m+'-'+d.getDate();
 
     const [enteredTodo,setEnteredTodo]=useState('');
